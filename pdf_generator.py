@@ -120,7 +120,7 @@ class PDFGenerator:
         year = datetime.now().year
         
         # Set dynamic title
-        self.report_title = f"{crop_name} - {total_acres} Acres - {season} {year}"
+        self.report_title = f"{crop_name} _ {total_acres} Acres _ {season} {year}"
         self.timestamp = f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         self.farmer_name = farmer_name
         
