@@ -1,82 +1,410 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm Finance Report Form</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #27ae60;
+            --accent-light: #ecf9f1;
+            --border: #dcdfe3;
+            --danger: #e74c3c;
+            --bg: #f5f7fb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: #333;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 32px 16px;
+        }
+
+        .card {
+            background: #fff;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+            padding: 28px 32px 32px;
+        }
+
+        .card-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: var(--primary);
+            letter-spacing: 0.02em;
+        }
+
+        .subtitle {
+            margin: 4px 0 0;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            background-color: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px 20px;
+            background-color: #fff;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+            gap: 10px;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--primary);
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .optional {
+            font-weight: normal;
+            color: #9ca3af;
+            font-size: 0.8rem;
+            margin-left: 4px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 9px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+            background-color: #f9fafb;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(39, 174, 96, 0.25);
+            background-color: #ffffff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .helper-text {
+            margin-top: 4px;
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+        .footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .disclaimer {
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+        .btn-primary {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 18px rgba(22, 163, 74, 0.35);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(22, 163, 74, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 14px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 1rem;
+        }
+
+        .required-hint {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 20px 18px 22px;
+            }
+            .section {
+                padding: 14px 14px 16px;
+            }
+            h1 {
+                font-size: 1.35rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Farm Finance Report Form</h1>
-    
-    <form method="POST" action="/generate">
-        <h2>Farmer & Crop Details</h2>
-        
-        <label for="farmer_name">Farmer Name:</label>
-        <input type="text" id="farmer_name" name="farmer_name" required>
-        <br><br>
-        
-        <label for="crop_name">Crop Name:</label>
-        <input type="text" id="crop_name" name="crop_name" required>
-        <br><br>
-        
-        <label for="season">Season:</label>
-        <input type="text" id="season" name="season" required>
-        <br><br>
-        
-        <label for="total_acres">Total Acres:</label>
-        <input type="number" id="total_acres" name="total_acres" step="0.01" required>
-        <br><br>
-        
-        <label for="date_of_sowing">Date of Sowing:</label>
-        <input type="date" id="date_of_sowing" name="date_of_sowing" required>
-        <br><br>
-        
-        <label for="date_of_harvest">Date of Harvest:</label>
-        <input type="date" id="date_of_harvest" name="date_of_harvest" required>
-        <br><br>
-        
-        <label for="location">Location (village/taluka/district/state):</label>
-        <input type="text" id="location" name="location" required>
-        <br><br>
-        
-        <h2>Expense Details</h2>
-        
-        <label for="expense_category">Expense Category:</label>
-        <input type="text" id="expense_category" name="expense_category" required>
-        <br><br>
-        
-        <label for="expense_amount">Expense Amount:</label>
-        <input type="number" id="expense_amount" name="expense_amount" step="0.01" required>
-        <br><br>
-        
-        <label for="expense_date">Expense Date:</label>
-        <input type="date" id="expense_date" name="expense_date" required>
-        <br><br>
-        
-        <label for="expense_description">Expense Description (optional):</label>
-        <textarea id="expense_description" name="expense_description" rows="3"></textarea>
-        <br><br>
-        
-        <h2>Income Details</h2>
-        
-        <label for="income_category">Income Category:</label>
-        <input type="text" id="income_category" name="income_category" required>
-        <br><br>
-        
-        <label for="income_amount">Income Amount:</label>
-        <input type="number" id="income_amount" name="income_amount" step="0.01" required>
-        <br><br>
-        
-        <label for="income_date">Income Date:</label>
-        <input type="date" id="income_date" name="income_date" required>
-        <br><br>
-        
-        <label for="income_description">Income Description (optional):</label>
-        <textarea id="income_description" name="income_description" rows="3"></textarea>
-        <br><br>
-        
-        <input type="submit" value="Generate Report">
-    </form>
+    <div class="page-wrapper">
+        <div class="card">
+            <div class="card-header">
+                <div class="title-row">
+                    <div>
+                        <h1>Farm Finance Report Form</h1>
+                        <p class="subtitle">Capture your season’s financials and generate a polished PDF report.</p>
+                    </div>
+                    <span class="badge">GramIQ | Beta</span>
+                </div>
+            </div>
+
+            <form method="POST" action="/generate">
+                <p class="required-hint">Fields marked with * are required.</p>
+
+                <!-- Farmer & Crop Details -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Farmer &amp; Crop Details</h2>
+                        <span class="section-tag">Core Information</span>
+                    </div>
+                    <div class="grid-2">
+                        <div>
+                            <label for="farmer_name">Farmer Name *</label>
+                            <input type="text" id="farmer_name" name="farmer_name" required>
+                        </div>
+                        <div>
+                            <label for="crop_name">Crop Name *</label>
+                            <input type="text" id="crop_name" name="crop_name" required>
+                        </div>
+                        <div>
+                            <label for="season">Season *</label>
+                            <input type="text" id="season" name="season" placeholder="e.g., Kharif / Rabi" required>
+                        </div>
+                        <div>
+                            <label for="total_acres">Total Acres *</label>
+                            <input type="number" id="total_acres" name="total_acres" step="0.01" required>
+                        </div>
+                        <div>
+                            <label for="date_of_sowing">Date of Sowing *</label>
+                            <input type="date" id="date_of_sowing" name="date_of_sowing" required>
+                        </div>
+                        <div>
+                            <label for="date_of_harvest">Date of Harvest *</label>
+                            <input type="date" id="date_of_harvest" name="date_of_harvest" required>
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <label for="location">Location (village / taluka / district / state) *</label>
+                            <input type="text" id="location" name="location" required>
+                            <p class="helper-text">Example: "Rampur, Taluka XYZ, District ABC, Maharashtra"</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+                                <!-- Expense Details -->
+                                <div class="section">
+                                    <div class="section-header">
+                                        <h2 class="section-title">Expense Details</h2>
+                                        <span class="section-tag">Multiple Entries</span>
+                                    </div>
+                
+                                    <div class="helper-text" style="margin-bottom: 10px;">
+                                        Add one or more expense rows. All amounts are in ₹.
+                                    </div>
+                
+                                    <div id="expense-rows">
+                                        <div class="grid-2 expense-row">
+                                            <div>
+                                                <label>Expense Category *</label>
+                                                <input type="text" name="expense_category" placeholder="e.g., Seeds, Fertilizers" required>
+                                            </div>
+                                            <div>
+                                                <label>Expense Amount (₹) *</label>
+                                                <input type="number" name="expense_amount" step="0.01" required>
+                                            </div>
+                                            <div>
+                                                <label>Expense Date *</label>
+                                                <input type="date" name="expense_date" required>
+                                            </div>
+                                            <div style="grid-column: 1 / -1;">
+                                                <label>
+                                                    Expense Description
+                                                    <span class="optional">(optional)</span>
+                                                </label>
+                                                <textarea name="expense_description" rows="2" placeholder="Short note about this expense"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <button type="button" id="add-expense-row" class="btn-primary" style="margin-top: 10px; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; box-shadow: none;">
+                                        + Add another expense
+                                    </button>
+                                </div>
+
+                <!-- Income Details -->
+                                <!-- Income Details -->
+                                <div class="section">
+                                    <div class="section-header">
+                                        <h2 class="section-title">Income Details</h2>
+                                        <span class="section-tag">Multiple Entries</span>
+                                    </div>
+                
+                                    <div class="helper-text" style="margin-bottom: 10px;">
+                                        Add one or more income rows. All amounts are in ₹.
+                                    </div>
+                
+                                    <div id="income-rows">
+                                        <div class="grid-2 income-row">
+                                            <div>
+                                                <label>Income Category *</label>
+                                                <input type="text" name="income_category" placeholder="e.g., Crop Sale, Subsidy" required>
+                                            </div>
+                                            <div>
+                                                <label>Income Amount (₹) *</label>
+                                                <input type="number" name="income_amount" step="0.01" required>
+                                            </div>
+                                            <div>
+                                                <label>Income Date *</label>
+                                                <input type="date" name="income_date" required>
+                                            </div>
+                                            <div style="grid-column: 1 / -1;">
+                                                <label>
+                                                    Income Description
+                                                    <span class="optional">(optional)</span>
+                                                </label>
+                                                <textarea name="income_description" rows="2" placeholder="Short note about this income"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <button type="button" id="add-income-row" class="btn-primary" style="margin-top: 10px; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; box-shadow: none;">
+                                        + Add another income
+                                    </button>
+                                </div>
+                <!-- Actions -->
+                <div class="footer-actions">
+                    <p class="disclaimer">
+                        By generating the report, you confirm that the entered data is accurate to the best of your knowledge.
+                    </p>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-icon">📄</span>
+                        <span>Generate PDF Report</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function cloneRow(containerId, rowClass) {
+            const container = document.getElementById(containerId);
+            const rows = container.getElementsByClassName(rowClass);
+            if (!rows.length) return;
+
+            const lastRow = rows[rows.length - 1];
+            const newRow = lastRow.cloneNode(true);
+
+            // Clear values in cloned inputs/textarea
+            Array.from(newRow.querySelectorAll('input, textarea')).forEach(function (el) {
+                el.value = '';
+            });
+
+            container.appendChild(newRow);
+        }
+
+        document.getElementById('add-expense-row').addEventListener('click', function () {
+            cloneRow('expense-rows', 'expense-row');
+        });
+
+        document.getElementById('add-income-row').addEventListener('click', function () {
+            cloneRow('income-rows', 'income-row');
+        });
+    </script>
 </body>
 </html>
