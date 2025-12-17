@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Finance Report Form</title>
+</head>
+<body>
+    <h1>Farm Finance Report Form</h1>
+    
+    <form method="POST" action="/generate">
+        <h2>Farmer & Crop Details</h2>
+        
+        <label for="farmer_name">Farmer Name:</label>
+        <input type="text" id="farmer_name" name="farmer_name" required>
+        <br><br>
+        
+        <label for="crop_name">Crop Name:</label>
+        <input type="text" id="crop_name" name="crop_name" required>
+        <br><br>
+        
+        <label for="season">Season:</label>
+        <input type="text" id="season" name="season" required>
+        <br><br>
+        
+        <label for="total_acres">Total Acres:</label>
+        <input type="number" id="total_acres" name="total_acres" step="0.01" required>
+        <br><br>
+        
+        <label for="date_of_sowing">Date of Sowing:</label>
+        <input type="date" id="date_of_sowing" name="date_of_sowing" required>
+        <br><br>
+        
+        <label for="date_of_harvest">Date of Harvest:</label>
+        <input type="date" id="date_of_harvest" name="date_of_harvest" required>
+        <br><br>
+        
+        <label for="location">Location (village/taluka/district/state):</label>
+        <input type="text" id="location" name="location" required>
+        <br><br>
+        
+        <h2>Expense Details</h2>
+        
+        <label for="expense_category">Expense Category:</label>
+        <input type="text" id="expense_category" name="expense_category" required>
+        <br><br>
+        
+        <label for="expense_amount">Expense Amount:</label>
+        <input type="number" id="expense_amount" name="expense_amount" step="0.01" required>
+        <br><br>
+        
+        <label for="expense_date">Expense Date:</label>
+        <input type="date" id="expense_date" name="expense_date" required>
+        <br><br>
+        
+        <label for="expense_description">Expense Description (optional):</label>
+        <textarea id="expense_description" name="expense_description" rows="3"></textarea>
+        <br><br>
+        
+        <h2>Income Details</h2>
+        
+        <label for="income_category">Income Category:</label>
+        <input type="text" id="income_category" name="income_category" required>
+        <br><br>
+        
+        <label for="income_amount">Income Amount:</label>
+        <input type="number" id="income_amount" name="income_amount" step="0.01" required>
+        <br><br>
+        
+        <label for="income_date">Income Date:</label>
+        <input type="date" id="income_date" name="income_date" required>
+        <br><br>
+        
+        <label for="income_description">Income Description (optional):</label>
+        <textarea id="income_description" name="income_description" rows="3"></textarea>
+        <br><br>
+        
+        <input type="submit" value="Generate Report">
+    </form>
+</body>
+</html>
