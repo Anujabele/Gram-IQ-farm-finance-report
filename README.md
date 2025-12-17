@@ -86,7 +86,6 @@ Income information (category, amount, date, description)
 
 Click Generate Report
 The PDF will be automatically downloaded.
-
 4.View Generated Files:
 -PDF reports are saved in the reports/ directory
 -Chart images are saved in the static/charts/ directory
@@ -116,3 +115,5 @@ Gram-IQ-farm-finance-report/
 Configuration
 The application runs in debug mode by default. For production, edit app.py and set:
 app.run(debug=False)
+
+Demo video- https://youtu.be/eSjwJe73HU0
