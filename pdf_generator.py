@@ -10,19 +10,14 @@ from pathlib import Path
 
 class PDFGenerator:
     def __init__(self, output_path, logo_path=None):
-        """
-        Initialize PDF generator.
-        
-        Args:
-            output_path: Path where PDF will be saved
-            logo_path: Optional path to logo image
-        """
+        """Initialize PDF generator."""
         self.output_path = output_path
         self.logo_path = logo_path
         self.story = []
+        # this must exist before _setup_custom_styles()
         self.styles = getSampleStyleSheet()
         self._setup_custom_styles()
-    
+
     def _setup_custom_styles(self):
         """Setup custom paragraph styles."""
         self.styles.add(ParagraphStyle(
@@ -33,7 +28,7 @@ class PDFGenerator:
             spaceAfter=12,
             alignment=TA_CENTER
         ))
-        
+
         self.styles.add(ParagraphStyle(
             name='SectionHeading',
             parent=self.styles['Heading2'],
@@ -42,7 +37,7 @@ class PDFGenerator:
             spaceAfter=10,
             spaceBefore=12
         ))
-        
+
         self.styles.add(ParagraphStyle(
             name='FooterText',
             parent=self.styles['Normal'],
@@ -52,43 +47,64 @@ class PDFGenerator:
         ))
     
     def _header_footer(self, canvas, doc):
-        """Draw header and footer on every page."""
-        # Save state
-        canvas.saveState()
-        
-        # Header
-        header_y = doc.height + doc.topMargin - 0.5 * inch
-        
-        # Logo (if available)
-        if self.logo_path and Path(self.logo_path).exists():
-            try:
-                logo = Image(self.logo_path, width=1.5*inch, height=0.5*inch)
-                logo.drawOn(canvas, doc.leftMargin, header_y)
-            except:
-                pass  # Skip logo if image can't be loaded
-        
-        # Title (will be set dynamically)
-        if hasattr(self, 'report_title'):
-            canvas.setFont('Helvetica-Bold', 14)
-            canvas.drawCentredString(doc.width/2.0 + doc.leftMargin, header_y, self.report_title)
-        
-        # Timestamp and Farmer Name
+     canvas.saveState()
+
+    # header top reference (SAFE here)
+     header_top = doc.height + doc.topMargin
+
+    # Row 1: Title
+     title_y = header_top - 0.4 * inch
+     if hasattr(self, 'report_title'):
+        canvas.setFont('Helvetica-Bold', 15)
+        canvas.drawCentredString(
+            doc.leftMargin + doc.width / 2,
+            title_y,
+            self.report_title
+        )
+
+    # Row 2: Logo + Timestamp
+     row2_y = title_y - 0.45 * inch
+
+     if self.logo_path and Path(self.logo_path).exists():
+        try:
+            logo_width = 1.4 * inch
+            logo_height = 0.45 * inch
+            logo = Image(self.logo_path, logo_width, logo_height)
+            logo.drawOn(canvas, doc.leftMargin, row2_y - logo_height)
+        except:
+            pass
+
+     if hasattr(self, 'timestamp'):
         canvas.setFont('Helvetica', 9)
-        if hasattr(self, 'timestamp'):
-            canvas.drawRightString(doc.width + doc.leftMargin, header_y, self.timestamp)
-        if hasattr(self, 'farmer_name'):
-            canvas.setFont('Helvetica', 10)
-            canvas.drawString(doc.leftMargin, header_y - 0.3*inch, f"Farmer: {self.farmer_name}")
-        
-        # Footer
-        footer_text = "Proudly maintained accounting with GramIQ"
-        canvas.setFont('Helvetica', 9)
-        canvas.setFillColor(colors.grey)
-        canvas.drawCentredString(doc.width/2.0 + doc.leftMargin, 0.5*inch, footer_text)
-        
-        # Restore state
-        canvas.restoreState()
-    
+        canvas.drawRightString(
+            doc.leftMargin + doc.width,
+            row2_y - 0.15 * inch,
+            self.timestamp
+        )
+
+    # Row 3: Farmer name
+     farmer_y = row2_y - 0.55 * inch
+     if hasattr(self, 'farmer_name'):
+        canvas.setFont('Helvetica', 10)
+        canvas.drawString(
+            doc.leftMargin,
+            farmer_y,
+            f"Farmer: {self.farmer_name}"
+        )
+
+    # Footer
+     canvas.setFont('Helvetica', 9)
+     canvas.setFillColor(colors.grey)
+     canvas.drawCentredString(
+        doc.leftMargin + doc.width / 2,
+        0.5 * inch,
+        "Proudly maintained accounting with GramIQ"
+    )
+
+     canvas.restoreState()
+
+
+
     def generate_pdf(self, data):
         """
         Generate the complete PDF report.
@@ -130,6 +146,8 @@ class PDFGenerator:
     def _add_finance_summary(self, data):
         """Add Section 1: Finance Summary."""
         self.story.append(Paragraph("Finance Summary", self.styles['SectionHeading']))
+        self.story.append(Spacer(1, 0.6 * inch))
+
         
         # Summary data
         total_income = data.get('total_income', 0)
@@ -163,7 +181,7 @@ class PDFGenerator:
         ]))
         
         self.story.append(summary_table)
-        self.story.append(Spacer(1, 0.3*inch))
+        self.story.append(Spacer(1, 0.6 * inch))
         
         # Embed chart
         chart_path = data.get('chart_path')
@@ -180,6 +198,7 @@ class PDFGenerator:
     def _add_expense_breakdown(self, data):
         """Add Section 3: Expense Breakdown Table."""
         self.story.append(Paragraph("Expense Breakdown", self.styles['SectionHeading']))
+        self.story.append(Spacer(1, 0.6 * inch))
         
         expenses = data.get('expenses', [])
         
@@ -223,6 +242,7 @@ class PDFGenerator:
     def _add_income_breakdown(self, data):
         """Add Section 4: Income Breakdown Table."""
         self.story.append(Paragraph("Income Breakdown", self.styles['SectionHeading']))
+        self.story.append(Spacer(1, 0.6 * inch))
         
         incomes = data.get('incomes', [])
         
@@ -266,6 +286,7 @@ class PDFGenerator:
     def _add_ledger(self, data):
         """Add Section 5: Ledger (merged income + expense)."""
         self.story.append(Paragraph("Ledger", self.styles['SectionHeading']))
+        self.story.append(Spacer(1, 0.6 * inch))
         
         # Combine and sort by date
         ledger_entries = []
